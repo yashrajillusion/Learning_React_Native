@@ -1,33 +1,43 @@
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function HeaderTabs() {
+  const [activeTab, setActive] = useState("Delivery");
   return (
-    <SafeAreaView>
-      <HeaderButton text="Delivery" />
-      <HeaderButton text="Pickup" />
-    </SafeAreaView>
+    <View style={styles.view}>
+      <HeaderButton
+        text="Delivery"
+        activeTab={activeTab}
+        setActive={setActive}
+      />
+      <HeaderButton text="Pickup" activeTab={activeTab} setActive={setActive} />
+    </View>
   );
 }
 
-const HeaderButton = ({ text }) => {
+const HeaderButton = ({ text, activeTab, setActive }) => {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity>
-        <Text style={styles.text}>{text}</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      onPress={() => setActive(text)}
+      style={{
+        ...styles.container,
+        backgroundColor: activeTab === text ? "black" : "white",
+      }}
+    >
+      <Text
+        style={{
+          ...styles.text,
+          color: activeTab === text ? "white" : "black",
+        }}
+      >
+        {text}
+      </Text>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "black",
     paddingVertical: 6,
     paddingHorizontal: 16,
     borderRadius: 30,
@@ -35,5 +45,10 @@ const styles = StyleSheet.create({
   text: {
     color: "white",
     fontSize: 15,
+    fontWeight: "900",
+  },
+  view: {
+    flexDirection: "row",
+    alignSelf: "center",
   },
 });
