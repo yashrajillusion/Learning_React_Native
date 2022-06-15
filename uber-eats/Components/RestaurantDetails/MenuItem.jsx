@@ -6,7 +6,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Divider } from "react-native-elements";
+import { addTocart } from "../../Redux/Cart/action";
 
 const foods = [
   {
@@ -84,12 +88,32 @@ const foods = [
       "https://thestayathomechef.com/wp-content/uploads/2017/08/Most-Amazing-Lasagna-2-e1574792735811.jpg",
   },
 ];
-export default function MenuItem() {
+export default function MenuItem({ restaurantName }) {
+  const dispatch = useDispatch();
+  const cartItems = useSelector((store) => store.cart.selectedItems.items);
+
+  const isFoodInCart = (food) => {
+    return Boolean(cartItems.find((item) => item.title === food));
+  };
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       {foods.map((res, i) => (
         <View key={i}>
           <View style={styles.MenuItemStyle}>
+            <BouncyCheckbox
+              iconStyle={{ borderColor: "lightgray", borderRadius: 0 }}
+              fillColor="green"
+              isChecked={isFoodInCart(res.title)}
+              onPress={(checkboxValue) => {
+                dispatch(
+                  addTocart({
+                    ...res,
+                    restaurantName,
+                    checkboxValue,
+                  })
+                );
+              }}
+            />
             <View style={{ width: 240, justifyContent: "space-evenly" }}>
               <Text style={styles.titleStyle}>{res.title}</Text>
               <Text>{res.description}</Text>
@@ -100,7 +124,11 @@ export default function MenuItem() {
               source={{ uri: res.image }}
             ></Image>
           </View>
-          <Divider width={0.5} orientation="vertical" />
+          <Divider
+            width={0.5}
+            orientation="vertical"
+            style={{ marginHorizontal: 20 }}
+          />
         </View>
       ))}
     </ScrollView>
