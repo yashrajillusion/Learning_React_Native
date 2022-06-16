@@ -135,7 +135,7 @@ export default function MenuItem({ restaurantName }) {
   );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   MenuItemStyle: {
     flexDirection: "row",
     justifyContent: "space-between",

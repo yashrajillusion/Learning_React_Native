@@ -1,4 +1,6 @@
 import { ADD_TO_CART } from "./action";
+import firebase from "../../firebase";
+const db = firebase.firestore();
 
 const initState = {
   selectedItems: {
